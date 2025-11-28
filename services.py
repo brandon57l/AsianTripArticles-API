@@ -15,16 +15,15 @@ def serialize_doc(doc):
         doc['published_at'] = doc['published_at'].isoformat()
     return doc
 
-def find_articles_by_keywords(keywords: list):
+def find_articles_by_keyword(keyword: str):
     """
-    Searches for articles where the title, summary, or paragraphs match any of the given keywords.
+    Searches for articles where the title, summary, or paragraphs match the given keyword.
     """
-    regex_pattern = "|".join(keywords)
     query = {
         "$or": [
-            {"title": {"$regex": regex_pattern, "$options": "i"}},
-            {"summary": {"$regex": regex_pattern, "$options": "i"}},
-            {"sections.paragraphs": {"$regex": regex_pattern, "$options": "i"}}
+            {"title": {"$regex": keyword, "$options": "i"}},
+            {"summary": {"$regex": keyword, "$options": "i"}},
+            {"sections.paragraphs": {"$regex": keyword, "$options": "i"}}
         ]
     }
     projection = {
@@ -37,7 +36,7 @@ def find_articles_by_keywords(keywords: list):
     return {
         "status": "success", "code": 200,
         "meta": {
-            "query": keywords,
+            "query": keyword,
             "total_results": len(results),
             "timestamp": datetime.datetime.now().isoformat()
         },

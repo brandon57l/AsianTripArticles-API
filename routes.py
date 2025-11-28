@@ -7,15 +7,15 @@ api_blueprint = Blueprint('api', __name__, url_prefix='/api')
 @api_blueprint.route('/articles/search', methods=['GET'])
 def search_articles():
     """
-    Searches for articles based on a comma-separated list of keywords in the 'q' query parameter.
-    Example: /api/articles/search?q=tokyo,food
+    Searches for articles based on a single keyword in the 'q' query parameter.
+    Example: /api/articles/search?q=tokyo
     """
     query_string = request.args.get('q', '')
     if not query_string:
         return jsonify({"status": "error", "code": 400, "message": "Query parameter 'q' is missing."}), 400
     
-    keywords = [keyword.strip() for keyword in query_string.split(',')]
-    result = services.find_articles_by_keywords(keywords)
+    # Now, the query_string is treated as a single keyword.
+    result = services.find_articles_by_keyword(query_string)
     return jsonify(result), result.get('code', 200)
 
 @api_blueprint.route('/articles/<article_id>', methods=['GET'])
