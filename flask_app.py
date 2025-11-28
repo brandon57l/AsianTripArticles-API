@@ -27,4 +27,6 @@ app = create_app()
 if __name__ == '__main__':
     port = 5000
 
+    # Start the Flask application for local development
+    # Gunicorn will be used in production on Render
     app.run(port=port, debug=True)
